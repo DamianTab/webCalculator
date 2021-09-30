@@ -1,10 +1,10 @@
-package damian.tab.webCalculator;
+package damian.tab.calculator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WebCalculatorApplicationTests {
+class CalculatorApplicationTests {
 
 	@Test
 	void contextLoads() {

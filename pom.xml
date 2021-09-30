@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>damian.tab</groupId>
-	<artifactId>webCalculator</artifactId>
+	<artifactId>calculator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>webCalculator</name>
+	<name>calculator</name>
 	<description>Student project for Software Engineering Environments course on Uni.lu</description>
 	<properties>
 		<java.version>11</java.version>

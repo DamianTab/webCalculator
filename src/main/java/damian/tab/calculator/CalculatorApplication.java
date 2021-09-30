@@ -1,13 +1,13 @@
-package damian.tab.webCalculator;
+package damian.tab.calculator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WebCalculatorApplication {
+public class CalculatorApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WebCalculatorApplication.class, args);
+		SpringApplication.run(CalculatorApplication.class, args);
 	}
 
 }
