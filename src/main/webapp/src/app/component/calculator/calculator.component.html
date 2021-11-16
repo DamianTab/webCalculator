@@ -1,14 +1,32 @@
-<p-card header="Calculator" >
-  <p-inputNumber [(ngModel)]="first" ></p-inputNumber>
-  <p-inputNumber [(ngModel)]="second" ></p-inputNumber>
-  <p-inputNumber [(ngModel)]="result" mode="decimal"></p-inputNumber>
+<p-card header="Calculator">
 
-  <p-button>+</p-button>
-  <p-button>-</p-button>
-  <p-button>*</p-button>
-  <p-button>/</p-button>
+  <div class="grid">
+    <span class="col p-float-label margin">
+      <p-inputNumber id="first-input" [(ngModel)]="first"></p-inputNumber>
+      <label for="first-input">First Number</label>
+    </span>
 
+    <span class="col p-float-label margin">
+        <p-inputNumber id="second-number" [(ngModel)]="second"></p-inputNumber>
+        <label for="second-number">Second Number</label>
+    </span>
 
+    <div class="col"></div>
 
+    <span class="col p-float-label margin">
+      <p-inputNumber id="result-number" [(ngModel)]="result" [disabled]="true" mode="decimal"></p-inputNumber>
+        <label for="second-number">Result</label>
+    </span>
+  </div>
+
+  <div class="grid">
+    <button class="col" pButton type="button" label="+" (click)="calculate('addition')"></button>
+    <button class="col" pButton type="button" label="-" (click)="calculate('subtraction')"></button>
+    <button class="col" pButton type="button" label="*" (click)="calculate('multiplication')"></button>
+    <button class="col" pButton type="button" label="/" (click)="calculate('division')"></button>
+  </div>
 
 </p-card>
+
+
+

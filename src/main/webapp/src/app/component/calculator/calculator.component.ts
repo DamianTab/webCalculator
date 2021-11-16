@@ -7,8 +7,8 @@ import {CalculationService} from "../../service/calculation.service";
   styleUrls: ['./calculator.component.scss']
 })
 export class CalculatorComponent implements OnInit {
-  first: number = 0;
-  second: number = 0;
+  first: number = 10.124;
+  second: number = 2.2;
   result: number = 0;
 
   constructor(private calculationService: CalculationService) {
@@ -18,7 +18,9 @@ export class CalculatorComponent implements OnInit {
   }
 
   calculate(operation: string) {
-    this.calculationService.sendCalculationRequest(operation);
+    this.calculationService.sendCalculationRequest(operation, this.first, this.second)?.subscribe(result => {
+      this.result = result.result;
+    });
   }
 
 }
