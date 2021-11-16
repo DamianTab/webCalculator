@@ -1,6 +1,5 @@
-package api;
+package damian.tab.calculator.api;
 
-import damian.tab.calculator.api.CalculatorController;
 import damian.tab.calculator.service.CalculationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

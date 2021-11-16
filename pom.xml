@@ -37,6 +37,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<version>1.8.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -63,7 +69,7 @@
 				</executions>
 			</plugin>
 
-<!--	For executing integration tests		-->
+<!--	For executing integration tests in development		-->
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>3.0.0-M5</version>
@@ -75,6 +81,17 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+
+			<!--	Copying Angular app to WAR		-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.2</version>
+				<configuration>
+					<warSourceDirectory>target/webapp</warSourceDirectory>
+				</configuration>
 			</plugin>
 
 <!--	Default plugin	-->
@@ -121,21 +138,135 @@
 							</arguments>
 						</configuration>
 					</plugin>
-					<!--	Copying Angular app to WAR		-->
+				</plugins>
+			</build>
+		</profile>
+
+
+		<profile>
+			<id>test-jar</id>
+			<build>
+				<plugins>
+
+<!--					<plugin>-->
+<!--						<groupId>org.apache.maven.plugins</groupId>-->
+<!--						<artifactId>maven-dependency-plugin</artifactId>-->
+<!--						<version>3.2.0</version>-->
+<!--						<executions>-->
+<!--							<execution>-->
+<!--								<id>copy-dependencies</id>-->
+<!--								<phase>prepare-package</phase>-->
+<!--								<goals>-->
+<!--									<goal>copy-dependencies</goal>-->
+<!--								</goals>-->
+<!--								<configuration>-->
+<!--									<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+<!--									<overWriteReleases>false</overWriteReleases>-->
+<!--									<overWriteSnapshots>false</overWriteSnapshots>-->
+<!--									<overWriteIfNewer>true</overWriteIfNewer>-->
+<!--								</configuration>-->
+<!--							</execution>-->
+<!--						</executions>-->
+<!--					</plugin>-->
+
+<!--&lt;!&ndash;		Create Jar with only test classes			&ndash;&gt;-->
+<!--					<plugin>-->
+<!--						<groupId>org.apache.maven.plugins</groupId>-->
+<!--						<artifactId>maven-jar-plugin</artifactId>-->
+<!--						<version>3.2.0</version>-->
+<!--						<executions>-->
+<!--							<execution>-->
+<!--								<goals>-->
+<!--									<goal>test-jar</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
+<!--						</executions>-->
+<!--						<configuration>-->
+<!--							<archive>-->
+<!--								<manifest>-->
+<!--									<addClasspath>true</addClasspath>-->
+<!--									<classpathPrefix>/lib</classpathPrefix>-->
+<!--									<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>-->
+<!--								</manifest>-->
+<!--							</archive>-->
+<!--							<includes>-->
+<!--								<include>target/lib/</include>-->
+<!--							</includes>-->
+<!--						</configuration>-->
+<!--					</plugin>-->
+
+
+
+
+
+
+<!--					<plugin>-->
+<!--						<groupId>org.apache.maven.plugins</groupId>-->
+<!--						<artifactId>maven-assembly-plugin</artifactId>-->
+<!--						<version>3.3.0</version>-->
+<!--						<configuration>-->
+<!--							<archive>-->
+<!--								<manifest>-->
+<!--									<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>-->
+<!--								</manifest>-->
+<!--							</archive>-->
+<!--							<descriptorRefs>-->
+<!--								<descriptorRef>tests</descriptorRef>-->
+<!--							</descriptorRefs>-->
+<!--						</configuration>-->
+<!--						<executions>-->
+<!--							<execution>-->
+<!--								<id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
+<!--								<phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
+<!--								<goals>-->
+<!--									<goal>single</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
+<!--						</executions>-->
+<!--					</plugin>-->
+
+
+
+
+
+					<!-- create a complete jar for testing in other environments -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>3.3.2</version>
-						<configuration>
-							<warSourceDirectory>target/webapp</warSourceDirectory>
-							<webResources>
-								<resource>
-									<directory>${basedir}/target/test-classes</directory>
-									<targetPath>WEB-INF/classes</targetPath>
-								</resource>
-							</webResources>
-						</configuration>
+						<artifactId>maven-jar-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>test-jar</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<configuration>
+							<descriptors>
+								<descriptor>src/integration-test/assembly/test-jar-with-dependencies.xml</descriptor>
+							</descriptors>
+							<archive>
+								<manifest>
+									<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+
+
+
 				</plugins>
 			</build>
 		</profile>
