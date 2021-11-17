@@ -1,7 +1,8 @@
 #!/bin/bash
 
-PROJECT_PATH=$(pwd)
-LIB_PATH="$PROJECT_PATH/lib"
+#export PROJECT_PATH=$(pwd)
+#export LIB_PATH="$PROJECT_PATH/lib"
+
 ENV_SCRIPTS="./src/scripts"
 ENV_SCRIPT="env.sh"
 
