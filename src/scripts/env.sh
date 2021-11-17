@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ./"$1" || exit
+cd ./env/"$1" || exit
 
 
 case $2 in
