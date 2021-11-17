@@ -91,10 +91,17 @@
 				<version>3.3.2</version>
 				<configuration>
 					<warSourceDirectory>target/webapp</warSourceDirectory>
+					<webResources>
+						<resource>
+							<directory>${basedir}/target/test-classes</directory>
+							<targetPath>WEB-INF/classes</targetPath>
+						</resource>
+					</webResources>
 				</configuration>
+
 			</plugin>
 
-<!--	Default plugin	-->
+<!--	Override behaviour of executing and packaging jar/war	-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -106,6 +113,20 @@
 						</exclude>
 					</excludes>
 				</configuration>
+<!--		Add second war for testing (1st is default)		-->
+				<executions>
+					<execution>
+						<id>test-candidate</id>
+						<phase>package</phase>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>
+							<finalName>${project.artifactId}-${project.version}-tests</finalName>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -148,32 +169,10 @@
 			<build>
 				<plugins>
 
-<!--					<plugin>-->
-<!--						<groupId>org.apache.maven.plugins</groupId>-->
-<!--						<artifactId>maven-dependency-plugin</artifactId>-->
-<!--						<version>3.2.0</version>-->
-<!--						<executions>-->
-<!--							<execution>-->
-<!--								<id>copy-dependencies</id>-->
-<!--								<phase>prepare-package</phase>-->
-<!--								<goals>-->
-<!--									<goal>copy-dependencies</goal>-->
-<!--								</goals>-->
-<!--								<configuration>-->
-<!--									<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
-<!--									<overWriteReleases>false</overWriteReleases>-->
-<!--									<overWriteSnapshots>false</overWriteSnapshots>-->
-<!--									<overWriteIfNewer>true</overWriteIfNewer>-->
-<!--								</configuration>-->
-<!--							</execution>-->
-<!--						</executions>-->
-<!--					</plugin>-->
 
-<!--&lt;!&ndash;		Create Jar with only test classes			&ndash;&gt;-->
 <!--					<plugin>-->
 <!--						<groupId>org.apache.maven.plugins</groupId>-->
 <!--						<artifactId>maven-jar-plugin</artifactId>-->
-<!--						<version>3.2.0</version>-->
 <!--						<executions>-->
 <!--							<execution>-->
 <!--								<goals>-->
@@ -181,43 +180,23 @@
 <!--								</goals>-->
 <!--							</execution>-->
 <!--						</executions>-->
-<!--						<configuration>-->
-<!--							<archive>-->
-<!--								<manifest>-->
-<!--									<addClasspath>true</addClasspath>-->
-<!--									<classpathPrefix>/lib</classpathPrefix>-->
-<!--									<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>-->
-<!--								</manifest>-->
-<!--							</archive>-->
-<!--							<includes>-->
-<!--								<include>target/lib/</include>-->
-<!--							</includes>-->
-<!--						</configuration>-->
 <!--					</plugin>-->
-
-
-
-
-
-
 <!--					<plugin>-->
 <!--						<groupId>org.apache.maven.plugins</groupId>-->
 <!--						<artifactId>maven-assembly-plugin</artifactId>-->
-<!--						<version>3.3.0</version>-->
 <!--						<configuration>-->
+<!--							<descriptors>-->
+<!--								<descriptor>src/integration-test/assembly/test-jar-with-dependencies.xml</descriptor>-->
+<!--							</descriptors>-->
 <!--							<archive>-->
 <!--								<manifest>-->
 <!--									<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>-->
 <!--								</manifest>-->
 <!--							</archive>-->
-<!--							<descriptorRefs>-->
-<!--								<descriptorRef>tests</descriptorRef>-->
-<!--							</descriptorRefs>-->
 <!--						</configuration>-->
 <!--						<executions>-->
 <!--							<execution>-->
-<!--								<id>make-assembly</id> &lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
-<!--								<phase>package</phase> &lt;!&ndash; bind to the packaging phase &ndash;&gt;-->
+<!--								<phase>package</phase>-->
 <!--								<goals>-->
 <!--									<goal>single</goal>-->
 <!--								</goals>-->
@@ -228,38 +207,27 @@
 
 
 
-
-					<!-- create a complete jar for testing in other environments -->
+<!--		Add second war for testing (1st is default)		-->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jar-plugin</artifactId>
+						<artifactId>maven-war-plugin</artifactId>
 						<executions>
+<!--							<execution>-->
+<!--								<id>prod-candidate</id>-->
+<!--								<phase>package</phase>-->
+<!--								<goals>-->
+<!--									<goal>war</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
 							<execution>
-								<goals>
-									<goal>test-jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<configuration>
-							<descriptors>
-								<descriptor>src/integration-test/assembly/test-jar-with-dependencies.xml</descriptor>
-							</descriptors>
-							<archive>
-								<manifest>
-									<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>
-								</manifest>
-							</archive>
-						</configuration>
-						<executions>
-							<execution>
+								<id>test-candidate</id>
 								<phase>package</phase>
 								<goals>
-									<goal>single</goal>
+									<goal>war</goal>
 								</goals>
+								<configuration>
+									<classifier>tests</classifier>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
