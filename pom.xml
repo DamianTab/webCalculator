@@ -113,7 +113,7 @@
 						</exclude>
 					</excludes>
 				</configuration>
-<!--		Add second war for testing (1st is default)		-->
+<!--		For second war for testing (1st is default)		-->
 				<executions>
 					<execution>
 						<id>test-candidate</id>
@@ -124,6 +124,23 @@
 						<configuration>
 							<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>
 							<finalName>${project.artifactId}-${project.version}-tests</finalName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!--		Add second war for testing (1st is default)		-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>test-candidate</id>
+						<phase>package</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<classifier>tests</classifier>
 						</configuration>
 					</execution>
 				</executions>
@@ -159,82 +176,6 @@
 							</arguments>
 						</configuration>
 					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-
-		<profile>
-			<id>test-jar</id>
-			<build>
-				<plugins>
-
-
-<!--					<plugin>-->
-<!--						<groupId>org.apache.maven.plugins</groupId>-->
-<!--						<artifactId>maven-jar-plugin</artifactId>-->
-<!--						<executions>-->
-<!--							<execution>-->
-<!--								<goals>-->
-<!--									<goal>test-jar</goal>-->
-<!--								</goals>-->
-<!--							</execution>-->
-<!--						</executions>-->
-<!--					</plugin>-->
-<!--					<plugin>-->
-<!--						<groupId>org.apache.maven.plugins</groupId>-->
-<!--						<artifactId>maven-assembly-plugin</artifactId>-->
-<!--						<configuration>-->
-<!--							<descriptors>-->
-<!--								<descriptor>src/integration-test/assembly/test-jar-with-dependencies.xml</descriptor>-->
-<!--							</descriptors>-->
-<!--							<archive>-->
-<!--								<manifest>-->
-<!--									<mainClass>damian.tab.calculator.WebCalculatorStagingRunner</mainClass>-->
-<!--								</manifest>-->
-<!--							</archive>-->
-<!--						</configuration>-->
-<!--						<executions>-->
-<!--							<execution>-->
-<!--								<phase>package</phase>-->
-<!--								<goals>-->
-<!--									<goal>single</goal>-->
-<!--								</goals>-->
-<!--							</execution>-->
-<!--						</executions>-->
-<!--					</plugin>-->
-
-
-
-
-<!--		Add second war for testing (1st is default)		-->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-war-plugin</artifactId>
-						<executions>
-<!--							<execution>-->
-<!--								<id>prod-candidate</id>-->
-<!--								<phase>package</phase>-->
-<!--								<goals>-->
-<!--									<goal>war</goal>-->
-<!--								</goals>-->
-<!--							</execution>-->
-							<execution>
-								<id>test-candidate</id>
-								<phase>package</phase>
-								<goals>
-									<goal>war</goal>
-								</goals>
-								<configuration>
-									<classifier>tests</classifier>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-
-
-
 				</plugins>
 			</build>
 		</profile>
