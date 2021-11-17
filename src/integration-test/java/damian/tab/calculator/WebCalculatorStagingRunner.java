@@ -1,5 +1,6 @@
 package damian.tab.calculator;
 
+import damian.tab.calculator.api.ITCalculatorController;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -11,7 +12,7 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 import java.io.PrintWriter;
 
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectPackage;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 @Slf4j
 public class WebCalculatorStagingRunner {
@@ -30,7 +31,7 @@ public class WebCalculatorStagingRunner {
 
     public void runAll() {
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-                .selectors(selectPackage("damian.tab.calculator.api"))
+                .selectors(selectClass(ITCalculatorController.class))
                 .build();
         Launcher launcher = LauncherFactory.create();
         TestPlan testPlan = launcher.discover(request);
