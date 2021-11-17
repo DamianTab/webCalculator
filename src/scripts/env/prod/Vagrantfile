@@ -70,8 +70,9 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
    config.vm.provision "shell", inline: <<-SHELL
      apt-get update
-     cp /home/vagrant/scripts/install_java.sh /home/vagrant
-     chmod +755 /home/vagrant/install_java.sh
-     sh /home/vagrant/install_java.sh
    SHELL
+
+   config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./playbook/playbook.yml"
+   end
 end
