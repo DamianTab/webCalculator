@@ -1,4 +1,5 @@
 ---
+
 - name: "Check if GitLab-runner is already installed."
   stat: "path={{vHome}}/runner_is_installed.flag"
   register: flag
@@ -8,22 +9,10 @@
     curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
     sudo apt-get install gitlab-runner
     touch {{vHome}}/runner_is_installed.flag
-  register: output
   when: not flag.stat.exists
 
 
-#- name: "Install pip and necessary library for ansible"
-#  shell: |
-#    sudo apt -y install python-pip
-#    sudo pip install --upgrade python-gitlab
-#  register: output
-#  when: not flag.stat.exists
 
-#- debug: msg="{{ output.stdout }}"
-#
-#- debug: msg="{{ output.stderr }}"
-#
-#- debug: msg="{{ flag.stat.exists }}"
 
 
 - name: "Register integration runner"
@@ -35,25 +24,8 @@
   when: not flag.stat.exists
 
 
-
-
-#- name: "Check if gitlab-runner is installed"
-#  package_facts:
-#    manager: "auto"
+#- debug: msg="{{ output.stdout }}"
 #
-#- name: "Install GitLab runner."
-#  package: name={{ item }} state=present
-#  with_items:
-#    - gitlab-runner
-#  when: "'gitlab-runner' not in ansible_facts.packages"
-
-
-
-
-#- name: "Download GitLab repository installation script."
-#  get_url:
-#    url: "{{ gitlab_repository_installation_script_url }}"
-#    dest: /tmp/gitlab_install_repository.sh
-#    validate_certs: "{{ gitlab_download_validate_certs }}"
-#  when: not gitlab_file.stat.exists
+#- debug: msg="{{ output.stderr }}"
 #
+#- debug: msg="{{ flag.stat.exists }}"

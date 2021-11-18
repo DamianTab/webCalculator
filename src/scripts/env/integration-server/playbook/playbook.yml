@@ -12,13 +12,13 @@
 
   tasks:
 
-#  - include_role:
-#      name: gitlab
+  - include_role:
+      name: gitlab
 
   - include_role:
       name: gitlab_runner
 
-#  - include_role:
-#      name: docker
+  - include_role:
+      name: docker
 
   
