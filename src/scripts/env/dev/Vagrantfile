@@ -46,6 +46,7 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
   config.vm.synced_folder "../../../../lib", "/home/vagrant/libs"
+  config.vm.synced_folder "../../../../", "/home/vagrant/base_project"
 #  config.vm.synced_folder "../../shared", "/home/vagrant/scripts"
 
 

@@ -4,21 +4,48 @@
   stat: "path={{PROJECT_HOME}}"
   register: project
 
+
+#- name: "Create remote project folder"
+#  shell: mkdir {{PROJECT_HOME}}
+#  when: not project.stat.exists
+
+#- name: "Copy project"
+#  copy:
+#    src: "{{ item.src }} "
+#    dest: "{{ item.dest }}"
+#    owner: "vagrant"
+#    group: "vagrant"
+#    mode: '0755'
+#  with_items:
+#    - { src: '{{BASE_PROJECT}}/src', dest: '{{PROJECT_HOME}}/' }
+##    - { src: '../../../../../../../../../../src', dest: '{{PROJECT_HOME}}/' }
+#  when: not project.stat.exists
+
 - name: "Copy project"
-  copy: src={{ item.src }} dest={{ item.dest }}
-    owner: vagrant
-    group: vagrant
-    mode: '0755'
-  with_items:
-    - { src: 'containerizers', dest: '{{PROJECT_HOME}}/' }
-    - { src: 'another_file', dest: '/etc/somewhere' }
-    - { src: 'dynamic', dest: '{{ var_path }}' }
+  shell: |
+    rsync -av --progress {{BASE_PROJECT}}/src {{PROJECT_HOME}}/ --exclude main/webapp/node_modules
+    cp -r {{BASE_PROJECT}}/lib {{PROJECT_HOME}}/
+    cp {{BASE_PROJECT}}/.gitignore {{PROJECT_HOME}}/
+    cp {{BASE_PROJECT}}/.gitlab-ci.yml {{PROJECT_HOME}}/
+    cp {{BASE_PROJECT}}/pom.xml {{PROJECT_HOME}}/
+    cp {{BASE_PROJECT}}/README.md {{PROJECT_HOME}}/
+    cp {{BASE_PROJECT}}/run.sh {{PROJECT_HOME}}/
+    chmod -R +755 {{PROJECT_HOME}}
+    chown -R vagrant {{PROJECT_HOME}}
+    chgrp -R vagrant {{PROJECT_HOME}}
   when: not project.stat.exists
 
-#- name: "Add project to gitlab repository"
-#  shell: |
-#    mkdir {{JAVA_DIRECTORY}}
-#    cp {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}} {{JAVA_DIRECTORY}}
-#    chmod +755 {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}
+
+- name: "Add project to gitlab repository"
+  shell: |
+    sudo apt install -y git
+    cd {{PROJECT_HOME}}
+    git init
+    git config --global user.name "Damian Tabaczynski"
+    git config --global user.email "test@test.com"
+    git remote add origin http://192.168.33.9/gitlab/test/webCalculator.git
+    git add .
+    git commit -m "Initial commit"
+    git push -u origin master
 #  when: not project.stat.exists
 
