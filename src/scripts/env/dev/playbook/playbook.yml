@@ -1,0 +1,19 @@
+# vim: ts=2
+---
+- hosts: all
+  remote_user: vagrant
+  become: yes
+  become_method: sudo
+    
+  
+  vars:
+    HOME: /home/vagrant
+    JAVA_DIRECTORY: "/home/vagrant/java"
+    VAGRANT_LIBS: "/home/vagrant/libs"
+    JAVA_ARCHIVE: "jdk-11.0.12_linux-x64_bin.tar.gz"
+      
+  tasks:
+  - include_role:
+      name: java
+
+  

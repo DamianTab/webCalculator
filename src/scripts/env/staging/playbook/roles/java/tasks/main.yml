@@ -1,0 +1,26 @@
+---
+
+- name: "Check if java archive exists."
+  stat: path={{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}
+  register: java_archive
+
+
+- name: "Check if java is installed."
+  stat: path={{JAVA_DIRECTORY}}/jdk-11.0.12/bin/java
+  register: java_installed
+
+- name: "Copy java archive."
+  shell: |
+    mkdir {{JAVA_DIRECTORY}}
+    cp {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}} {{JAVA_DIRECTORY}}
+    chmod +755 {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}
+  when: not java_archive.stat.exists
+
+- name: "Install java"
+  shell: |
+    cd {{JAVA_DIRECTORY}}
+    tar -xzvf {{JAVA_ARCHIVE}}
+    echo "export JAVA_HOME={{JAVA_DIRECTORY}}/jdk-11.0.12" >> /home/vagrant/.bashrc
+    echo "export PATH={{JAVA_DIRECTORY}}/jdk-11.0.12/bin:$PATH" >> /home/vagrant/.bashrc
+    {{JAVA_DIRECTORY}}/jdk-11.0.12/bin/java -version
+  when: not java_installed.stat.exists
