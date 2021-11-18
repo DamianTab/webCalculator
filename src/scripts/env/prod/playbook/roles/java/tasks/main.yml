@@ -12,7 +12,9 @@
 - name: "Copy java archive."
   shell: |
     mkdir {{JAVA_DIRECTORY}}
-    cp {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}} {{JAVA_DIRECTORY}}
+    cp {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}}* {{JAVA_DIRECTORY}}
+    cat {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}0* > {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}
+    rm -rf {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}0*
     chmod +755 {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}
   when: not java_archive.stat.exists
 

@@ -7,5 +7,3 @@ Java 11 Spring Boot + Angular 12
 - Linux like host operating system
 - Install vagrant
 - create environments
-
-todo add code to git repository
