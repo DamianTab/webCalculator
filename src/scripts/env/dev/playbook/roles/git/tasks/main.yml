@@ -1,0 +1,24 @@
+---
+
+- name: "Check if project exists."
+  stat: "path={{PROJECT_HOME}}"
+  register: project
+
+- name: "Copy project"
+  copy: src={{ item.src }} dest={{ item.dest }}
+    owner: vagrant
+    group: vagrant
+    mode: '0755'
+  with_items:
+    - { src: 'containerizers', dest: '{{PROJECT_HOME}}/' }
+    - { src: 'another_file', dest: '/etc/somewhere' }
+    - { src: 'dynamic', dest: '{{ var_path }}' }
+  when: not project.stat.exists
+
+#- name: "Add project to gitlab repository"
+#  shell: |
+#    mkdir {{JAVA_DIRECTORY}}
+#    cp {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}} {{JAVA_DIRECTORY}}
+#    chmod +755 {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}
+#  when: not project.stat.exists
+

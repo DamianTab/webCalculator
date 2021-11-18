@@ -70,9 +70,9 @@
   when: not gitlab_file.stat.exists
 
 - name: "Transfer gitlab initialization script"
-  copy: src=./scripts/init_project.sh dest={{vHome}} mode=0755
+  copy: src=./scripts/init_project.sh dest={{HOME}} mode=0755
   when: not gitlab_file.stat.exists
 
 - name: "Execute gitlab initialization script"
-  command: sh {{vHome}}/init_project.sh
+  command: sh {{HOME}}/init_project.sh
   when: not gitlab_file.stat.exists

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#todo naprawic
 #export PROJECT_PATH=$(pwd)
 #export LIB_PATH="$PROJECT_PATH/lib"
 
@@ -14,20 +15,20 @@ echo "Creating all environments"
 ;;
 
 "start")
-sh $ENV_SCRIPT integration-server start
+#sh $ENV_SCRIPT integration-server start
 ;;
 
 "stop")
-sh $ENV_SCRIPT integration-server stop
+#sh $ENV_SCRIPT integration-server stop
 ;;
 
 "destroy")
-sh $ENV_SCRIPT integration-server destroy
+#sh $ENV_SCRIPT integration-server destroy
 ;;
 
 "restart")
-sh $ENV_SCRIPT integration-server destroy
-sh $ENV_SCRIPT integration-server start
+#sh $ENV_SCRIPT integration-server destroy
+#sh $ENV_SCRIPT integration-server start
 ;;
 
 *)

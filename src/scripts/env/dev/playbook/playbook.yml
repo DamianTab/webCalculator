@@ -11,9 +11,12 @@
     JAVA_DIRECTORY: "/home/vagrant/java"
     VAGRANT_LIBS: "/home/vagrant/libs"
     JAVA_ARCHIVE: "jdk-11.0.12_linux-x64_bin.tar.gz"
+    PROJECT_HOME: "/home/vagrant/webCalculator"
       
   tasks:
   - include_role:
       name: java
+  - include_role:
+      name: git
 
   

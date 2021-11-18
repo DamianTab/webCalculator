@@ -1,14 +1,14 @@
 ---
 
 - name: "Check if GitLab-runner is already installed."
-  stat: "path={{vHome}}/runner_is_installed.flag"
+  stat: "path={{HOME}}/runner_is_installed.flag"
   register: flag
 
 - name: "Install GitLab-runner."
   shell: |
     curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
     sudo apt-get install gitlab-runner
-    touch {{vHome}}/runner_is_installed.flag
+    touch {{HOME}}/runner_is_installed.flag
   when: not flag.stat.exists
 
 

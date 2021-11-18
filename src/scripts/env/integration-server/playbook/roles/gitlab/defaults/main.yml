@@ -3,7 +3,7 @@
 # use 'apt' or 'official' to get packages from standart
 # repositories or from the tools' official websites
 
-destination: "{{vHome}}/Tools_download"
+destination: "{{HOME}}/Tools_download"
 
 
 gitlab_external_url: "https://gitlab/"

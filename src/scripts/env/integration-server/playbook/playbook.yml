@@ -7,7 +7,7 @@
     
   
   vars:
-    vHome: /home/vagrant
+    HOME: /home/vagrant
     ROOT_TOKEN: this_is_my_private_token
 
   tasks:
