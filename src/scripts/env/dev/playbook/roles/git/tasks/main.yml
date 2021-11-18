@@ -4,48 +4,39 @@
   stat: "path={{PROJECT_HOME}}"
   register: project
 
-
-#- name: "Create remote project folder"
-#  shell: mkdir {{PROJECT_HOME}}
-#  when: not project.stat.exists
-
-#- name: "Copy project"
-#  copy:
-#    src: "{{ item.src }} "
-#    dest: "{{ item.dest }}"
-#    owner: "vagrant"
-#    group: "vagrant"
-#    mode: '0755'
-#  with_items:
-#    - { src: '{{BASE_PROJECT}}/src', dest: '{{PROJECT_HOME}}/' }
-##    - { src: '../../../../../../../../../../src', dest: '{{PROJECT_HOME}}/' }
-#  when: not project.stat.exists
-
-- name: "Copy project"
+- name: "Add project to gitlab repository or git clone"
   shell: |
-    rsync -av --progress {{BASE_PROJECT}}/src {{PROJECT_HOME}}/ --exclude main/webapp/node_modules
-    cp -r {{BASE_PROJECT}}/lib {{PROJECT_HOME}}/
-    cp {{BASE_PROJECT}}/.gitignore {{PROJECT_HOME}}/
-    cp {{BASE_PROJECT}}/.gitlab-ci.yml {{PROJECT_HOME}}/
-    cp {{BASE_PROJECT}}/pom.xml {{PROJECT_HOME}}/
-    cp {{BASE_PROJECT}}/README.md {{PROJECT_HOME}}/
-    cp {{BASE_PROJECT}}/run.sh {{PROJECT_HOME}}/
+    sudo apt install -y git jq
+    commit_count=$(curl -X GET --header "PRIVATE-TOKEN: this_is_my_private_token" --data "statistics=true" "http://192.168.33.9/gitlab/api/v4/projects/2" 2>/dev/null | jq -r '.statistics.commit_count')
+
+    if [ "$commit_count" -ne "0" ]
+    then
+      git clone http://test:12345678@192.168.33.9/gitlab/test/webCalculator.git
+    else
+
+      rsync -av --progress {{BASE_PROJECT}}/src {{PROJECT_HOME}}/ --exclude main/webapp/node_modules
+      cp -r {{BASE_PROJECT}}/lib {{PROJECT_HOME}}/
+      cp {{BASE_PROJECT}}/.gitignore {{PROJECT_HOME}}/
+      cp {{BASE_PROJECT}}/.gitlab-ci.yml {{PROJECT_HOME}}/
+      cp {{BASE_PROJECT}}/pom.xml {{PROJECT_HOME}}/
+      cp {{BASE_PROJECT}}/README.md {{PROJECT_HOME}}/
+      cp {{BASE_PROJECT}}/run.sh {{PROJECT_HOME}}/
+
+      cd {{PROJECT_HOME}}
+      git init
+      git config user.name "Damian Tabaczynski"
+      git config user.email "test@test.com"
+      git remote add origin http://192.168.33.9/gitlab/test/webCalculator.git
+      git add .
+      git commit -m "Initial commit"
+      git push -u http://test:12345678@192.168.33.9/gitlab/test/webCalculator.git master
+    fi
+  when: not project.stat.exists
+
+- name: "Change permissions"
+  shell: |
     chmod -R +755 {{PROJECT_HOME}}
     chown -R vagrant {{PROJECT_HOME}}
     chgrp -R vagrant {{PROJECT_HOME}}
-  when: not project.stat.exists
-
-
-- name: "Add project to gitlab repository"
-  shell: |
-    sudo apt install -y git
-    cd {{PROJECT_HOME}}
-    git init
-    git config --global user.name "Damian Tabaczynski"
-    git config --global user.email "test@test.com"
-    git remote add origin http://192.168.33.9/gitlab/test/webCalculator.git
-    git add .
-    git commit -m "Initial commit"
-    git push -u origin master
   when: not project.stat.exists
 
