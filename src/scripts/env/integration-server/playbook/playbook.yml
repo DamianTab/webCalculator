@@ -8,13 +8,17 @@
   
   vars:
     vHome: /home/vagrant
-      
+    ROOT_TOKEN: this_is_my_private_token
+
   tasks:
 
-  - include_role:
-      name: gitlab
+#  - include_role:
+#      name: gitlab
 
   - include_role:
-      name: docker
+      name: gitlab_runner
+
+#  - include_role:
+#      name: docker
 
   

@@ -1,0 +1,59 @@
+---
+- name: "Check if GitLab-runner is already installed."
+  stat: "path={{vHome}}/runner_is_installed.flag"
+  register: flag
+
+- name: "Install GitLab-runner."
+  shell: |
+    curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+    sudo apt-get install gitlab-runner
+    touch {{vHome}}/runner_is_installed.flag
+  register: output
+  when: not flag.stat.exists
+
+
+#- name: "Install pip and necessary library for ansible"
+#  shell: |
+#    sudo apt -y install python-pip
+#    sudo pip install --upgrade python-gitlab
+#  register: output
+#  when: not flag.stat.exists
+
+#- debug: msg="{{ output.stdout }}"
+#
+#- debug: msg="{{ output.stderr }}"
+#
+#- debug: msg="{{ flag.stat.exists }}"
+
+
+- name: "Register integration runner"
+  shell: |
+    sudo apt install -y jq
+    token=$(curl -X GET --header "PRIVATE-TOKEN: this_is_my_private_token" "http://localhost/gitlab/api/v4/projects/2" 2>/dev/null | jq -r '.runners_token')
+    curl -X POST --header "PRIVATE-TOKEN: this_is_my_private_token" --data "token=$token&description=[integration-server] docker&active=true&run_untagged=true&tag_list=integration" "http://localhost/gitlab/api/v4/runners"
+  register: output
+  when: not flag.stat.exists
+
+
+
+
+#- name: "Check if gitlab-runner is installed"
+#  package_facts:
+#    manager: "auto"
+#
+#- name: "Install GitLab runner."
+#  package: name={{ item }} state=present
+#  with_items:
+#    - gitlab-runner
+#  when: "'gitlab-runner' not in ansible_facts.packages"
+
+
+
+
+#- name: "Download GitLab repository installation script."
+#  get_url:
+#    url: "{{ gitlab_repository_installation_script_url }}"
+#    dest: /tmp/gitlab_install_repository.sh
+#    validate_certs: "{{ gitlab_download_validate_certs }}"
+#  when: not gitlab_file.stat.exists
+#
