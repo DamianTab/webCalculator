@@ -7,6 +7,5 @@ Java 11 Spring Boot + Angular 12
 - Linux like host operating system
 - Install vagrant
 - create environments
-- change gitlab root password at http://192.168.33.9/gitlab
 
-[comment]: <> (- Install vagrant plugin: `vagrant plugin install vagrant-scp`)
+todo add code to git repository

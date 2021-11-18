@@ -60,7 +60,6 @@
     src: ./scripts/gitlab.rb
     dest: /etc/gitlab
   when: not gitlab_file.stat.exists
-#  when: gitlab_file.stat.exists
 
 
 - name: "Reconfigure and restart gitlab"
@@ -70,6 +69,23 @@
     gitlab-ctl restart
   when: not gitlab_file.stat.exists
 
-#  gitlab-rails runner "token = User.find_by_username('automation-bot').personal_access_tokens.create(scopes: [:read_user, :read_repository], name: 'Automation token'); token.set_token('token-string-here123'); token.save!"
+- name: "Add custom root token"
+  shell:
+    gitlab-rails runner {{item}}
+  with_items:
+    - "token = 'User.find_by_username('root').personal_access_tokens.create(scopes: [:read_user, :read_repository, :api, :read_api], name: 'Automation token')'; token.set_token('this_is_my_private_token'); token.save!"
+  when: not gitlab_file.stat.exists
 
-#  curl --header "PRIVATE-TOKEN: QVy1PB7sTxfy4pqfZM1U" --data-urlencode "email=jon@doe.com&password=defaultpassword&username=jdoe&name=Jon Doe" "http://example.com/api/v3/users"
+- name: "Add default user for project"
+  shell:
+    curl -X POST --header {{item}}
+  with_items:
+      "'PRIVATE-TOKEN: this_is_my_private_token' --data 'username=test&password=12345678&email=test@test.com&name=Damian Tabaczynski' 'http://localhost/gitlab/api/v4/users'"
+  when: not gitlab_file.stat.exists
+
+- name: "Create gitlab repository for project"
+  shell:
+    curl -X POST --header {{item}}
+  with_items:
+      "'PRIVATE-TOKEN: this_is_my_private_token1' --data 'name=webCalculator' 'http://localhost/gitlab/api/v4/projects/user/2'"
+  when: not gitlab_file.stat.exists
