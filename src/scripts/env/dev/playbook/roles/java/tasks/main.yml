@@ -12,15 +12,15 @@
 - name: "Copy java archive."
   shell: |
     mkdir {{JAVA_DIRECTORY}}
-    cat {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}}0* > {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}}
-    cp {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}} {{JAVA_DIRECTORY}}
+    cp {{VAGRANT_LIBS}}/{{JAVA_ARCHIVE}}* {{JAVA_DIRECTORY}}
+    cat {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}0* > {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}
+    rm -rf {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}0*
     chmod +755 {{JAVA_DIRECTORY}}/{{JAVA_ARCHIVE}}
   when: not java_archive.stat.exists
 
 - name: "Install java"
   shell: |
     cd {{JAVA_DIRECTORY}}
-
     tar -xzvf {{JAVA_ARCHIVE}}
     echo "export JAVA_HOME={{JAVA_DIRECTORY}}/jdk-11.0.12" >> /home/vagrant/.bashrc
     echo "export PATH={{JAVA_DIRECTORY}}/jdk-11.0.12/bin:$PATH" >> /home/vagrant/.bashrc
