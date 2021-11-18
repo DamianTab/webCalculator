@@ -15,17 +15,17 @@ echo "Creating all environments"
 
 "start")
 echo "Start"
-sh $ENV_SCRIPT prod start
+sh $ENV_SCRIPT integration-server start
 ;;
 
 "stop")
 echo "Stop"
-sh $ENV_SCRIPT prod stop
+sh $ENV_SCRIPT integration-server stop
 ;;
 
 "destroy")
 echo "destroy"
-sh $ENV_SCRIPT prod destroy
+sh $ENV_SCRIPT integration-server destroy
 ;;
 
 *)

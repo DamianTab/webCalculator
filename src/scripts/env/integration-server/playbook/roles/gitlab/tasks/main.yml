@@ -12,13 +12,7 @@
 
 - name: "Safe system upgrade via aptitude."
   apt: 
-    upgrade: safe        
-
-
-- name: "Check if GitLab configuration file already exists."
-  stat: path=/etc/gitlab/gitlab.rb
-  register: gitlab_config_file
-
+    upgrade: safe
 
 - name: "Check if GitLab is already installed."
   stat: path=/usr/bin/gitlab-ctl
@@ -46,7 +40,7 @@
 - name: "Install GitLab repository."
   command: bash /tmp/gitlab_install_repository.sh
   when: not gitlab_file.stat.exists
-  
+
 
 - name: "Define the Gitlab package name."
   set_fact:
@@ -59,3 +53,23 @@
     name: "{{ gitlab_package_name | default(gitlab_edition) }}"
     state: present
   when: not gitlab_file.stat.exists
+
+
+- name: "Copy custom gitlab configuration file."
+  ansible.builtin.copy:
+    src: ./scripts/gitlab.rb
+    dest: /etc/gitlab
+  when: not gitlab_file.stat.exists
+#  when: gitlab_file.stat.exists
+
+
+- name: "Reconfigure and restart gitlab"
+  shell: |
+    gitlab-ctl reconfigure
+    gitlab-ctl restart unicorn
+    gitlab-ctl restart
+  when: not gitlab_file.stat.exists
+
+#  gitlab-rails runner "token = User.find_by_username('automation-bot').personal_access_tokens.create(scopes: [:read_user, :read_repository], name: 'Automation token'); token.set_token('token-string-here123'); token.save!"
+
+#  curl --header "PRIVATE-TOKEN: QVy1PB7sTxfy4pqfZM1U" --data-urlencode "email=jon@doe.com&password=defaultpassword&username=jdoe&name=Jon Doe" "http://example.com/api/v3/users"
