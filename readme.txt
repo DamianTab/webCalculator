@@ -1,19 +1,21 @@
-# Deployment pipeline project
+
+# Deployment pipeline project - Damian Tabaczyński
 
 
 ## Asset composition and technologies
 
 - a vagrant VM specification (i.e. Vagrant file)
 - Ansible playbooks to provision the VM
-- GitLab as VCS and CI running into the VM
-- Node, Maven, Oracle JDK11
-
+- GitLab as VCS (git) and CI running into the VM
+- Nodejs, Angular 12 as frontend
+- Oracle JDK11, Maven and SpringBoot in backend
 
 
 ## Prerequisites
 
 ### Hardware
-1. Laptop/PC with at least 8 Gb memory (recommended 16 Gb, ideally 32 Gb)
+1. Laptop/PC with at least 8 Gb memory (recommended 16 Gb, ideally 32 Gb).
+I want to emphasise that 8GB is exactly minimum. Author of this project does not take responsibility for very long processing time due to this fact.
 
 ### Software
 1. Linux-like host operating system (e.g. OS Ubuntu 18.04+)
@@ -21,15 +23,33 @@
 3. Vagrant (v 2.2.5, or higher)
 4. Ansible (v 2.7.5, or higher)
 
+  ## Basic Information
+  Whole project is **completely automatic**. There is no phase that requires interaction with user except first script run to create all necessary environments and tools.  In other words after pushing changes from development environment to VCS repository - whole process of building, testing, deploying and releasing candidate/product  is self-sufficient. All tasks like creating user, copying code to dev-env, changing passwords creating gitlab-runners etc. are as much non-interactive as creating vagrant VM or provisiongi through Ansible. More examples in *scenario.txt*
 
+### VMs (environments)
+- **dev** - development environment where is code that is connected with VCS repository
+- **integration-server** - VM with Gitlab server and integration environment
+- **staging** - VM with staging environment
+- **prod** - VM with production environment
+
+### Main Script
+Main script is **run.sh**:
+`run.sh <objectives> <list of environments>`
+
+Objectives:
+- start - creates VM with environment
+- stop - stops VM with environment
+- destroy - destroys VM with environment
+- rebuild - starts && destroys
+- provision - performs only provisioning
 
 
 ## Guidelines
 
-
-1- Get to the working directory
-
-cd ~/<git_root_folder>/devops/pipeline/s2-automate-build/integration-server
+1. Get to the main directory of provided project (same place where is this readme.txt).
+ 2. Run bash script run.sh
+ `sh run.sh start all`
+ In case of resource using / long waiting time perform in this order: `integration-server, dev, staging, prod`
 
 
 2- Vagrant is used to create a VM which acts as integration server.
@@ -99,5 +119,3 @@ Test Steps:
 
 Post conditions:
 - You have successfully logged in as administrator
-
-

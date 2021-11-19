@@ -67,5 +67,6 @@ release_app:
     - releasing
   script:
     #    shut down poprzedni jesli jest
+#    - ps -ef | grep wskInterface | awk '{ print $2 }'
     - cp target/*.war /home/vagrant/stage
 #    - java -jar

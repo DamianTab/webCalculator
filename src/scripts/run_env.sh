@@ -45,4 +45,5 @@ for ((i = 2; i <= $#; i++ )); do
   ;;
   esac
 
+  cd ../../
 done
