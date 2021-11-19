@@ -23,6 +23,10 @@
       cp {{BASE_PROJECT}}/run.sh {{PROJECT_HOME}}/
       cp {{BASE_PROJECT}}/*.txt {{PROJECT_HOME}}/
 
+      chmod -R +755 {{PROJECT_HOME}}
+      chown -R vagrant {{PROJECT_HOME}}
+      chgrp -R vagrant {{PROJECT_HOME}}
+
       cd {{PROJECT_HOME}}
       git init
       git config user.name "Damian Tabaczynski"
@@ -32,12 +36,5 @@
       git commit -m "Initial commit"
       git push -u http://test:12345678@192.168.33.9/gitlab/test/webCalculator.git master
     fi
-  when: not project.stat.exists
-
-- name: "Change permissions"
-  shell: |
-    chmod -R +755 {{PROJECT_HOME}}
-    chown -R vagrant {{PROJECT_HOME}}
-    chgrp -R vagrant {{PROJECT_HOME}}
   when: not project.stat.exists
 

@@ -1,10 +1,14 @@
-image: openkbs/jdk11-mvn-py3:latest
-
 stages:
   - build
   - test
   - package
   - deploy
+
+variables:
+  JAVA_HOME: /home/vagrant/java/jdk-11.0.12
+
+before_script:
+  - echo "Working"
 
 cache:
   paths:
