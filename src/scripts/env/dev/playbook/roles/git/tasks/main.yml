@@ -21,6 +21,7 @@
       cp {{BASE_PROJECT}}/pom.xml {{PROJECT_HOME}}/
       cp {{BASE_PROJECT}}/README.md {{PROJECT_HOME}}/
       cp {{BASE_PROJECT}}/run.sh {{PROJECT_HOME}}/
+      cp {{BASE_PROJECT}}/*.txt {{PROJECT_HOME}}/
 
       cd {{PROJECT_HOME}}
       git init
