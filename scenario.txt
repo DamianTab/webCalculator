@@ -1,60 +1,60 @@
 # Scenario 1
 
 ## Goal
-A git repo named HelloWorldMaven is successfully created.
-
+A git repo is successfully created.
 
 ## Pre-conditions
-- Gitlab is up and running
-- A user account different from root has been created
-
+- integration-server is up and running
 
 ## Main Success Scenario
-1. Log in to GitLab using a NO root account
-2. Create project and name it HelloWorldMaven
-3. Follow the instructions to create the remote and local repositories as indicated by gitlab.
-4. Commit and push to the remote repository.
-
+1. Create dev environment and wait for provisioning process to finish.
 
 ## Notes
-- In GitLab a project is a repository.
-
-
+- It is done in provisioning phase. It is posible to destroy and create new dev env. Then code will be "git clone" instead of init and "git push"
 
 
 # Scenario 2
 
 ## Goal
-The pipeline is successfully executed.
-
+The pipeline is successfully executed. (in automatic way)
 
 ## Pre-conditions
-- Up and Run gitlab & gitlab runner
-- Tag for docker runner is specified
-- Created project repository on gitlab
-
+- All environments are up and running without errors in provisioning
 
 ## Main Success Scenario
-1. Clone created repository from gitlab
-2. Add `.gitlab-ci.yml` with following content
+1. Execute
+ `sh run.sh start all`
+ and wait till process ends.
+2. Make changes in dev environment.
+3. Execute these:
 
-```
-image: maven:latest
+`git add .
+ git commit -m "Some changes"
+ git push http://test:12345678@192.168.33.9/gitlab/test/webCalculator.git origin master`
 
-stages:
-  - echo
+## Notes
+- In case of lack of resources it is possible to have up and running only 2 VM -> integration-server + {other}. Then it is necessary to click every step of pipeline in gitlab in order to perform singl step of it. Unfortunately this is manual work.
 
-echo_app:
-  stage: echo
-  tags:
-    - docker
-  script:
-    - echo "It works!"
-```
 
-3. Push file to gitlab repository
-4. Go to project's pipelines and wait until the pipeline has finished its execution.
+
+
+# Scenario 3
+
+## Goal
+Access to the product on production.
+
+## Pre-conditions
+- All environments are up and running (to perform automatically deployment and releasing)
+or
+- prod environment is up and running
+
+## Main Success Scenario
+1. Execute
+ `sh run.sh start all`
+ and wait till process ends.
+2. Open http://192.168.33.12:8082 on host machine.
 
 
 ## Notes
-- None.
+- during creation candidate/product only one environment up and running
+- run pipeline using gitlab www interface (clicking each step if failed)

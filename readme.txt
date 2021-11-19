@@ -27,10 +27,10 @@ I want to emphasise that 8GB is exactly minimum. Author of this project does not
   Whole project is **completely automatic**. There is no phase that requires interaction with user except first script run to create all necessary environments and tools.  In other words after pushing changes from development environment to VCS repository - whole process of building, testing, deploying and releasing candidate/product  is self-sufficient. All tasks like creating user, copying code to dev-env, changing passwords creating gitlab-runners etc. are as much non-interactive as creating vagrant VM or provisiongi through Ansible. More examples in *scenario.txt*
 
 ### VMs (environments)
-- **dev** - development environment where is code that is connected with VCS repository
-- **integration-server** - VM with Gitlab server and integration environment
-- **staging** - VM with staging environment
-- **prod** - VM with production environment
+- **dev** - development environment where is code that is connected with VCS repository | candidate: http://192.168.33.08:8079
+- **integration-server** - VM with Gitlab server and integration environment | gitlab http://192.168.33.9/gitlab
+- **staging** - VM with staging environment | product: http://192.168.33.10:8081 (after executing test is not available)
+- **prod** - VM with production environment | product: http://192.168.33.11:8082
 
 ### Main Script
 Main script is **run.sh**:
@@ -43,6 +43,18 @@ Objectives:
 - rebuild - starts && destroys
 - provision - performs only provisioning
 
+### Gitlab
+
+URL for gitlab server: http://192.168.33.9/gitlab
+
+**Root user**
+username: root
+password: password
+**Normal user** (Use only this one)
+username: test
+password: 12345678
+
+
 
 ## Guidelines
 
@@ -52,70 +64,15 @@ Objectives:
  In case of resource using / long waiting time perform in this order: `integration-server, dev, staging, prod`
 
 
-2- Vagrant is used to create a VM which acts as integration server.
-
-vagrant up
 
 
-
-3- Edit /etc/gitlab/gitlab.rb and replace
-
-external_url http://hostname
-
-by
-
-external_url 'http://192.168.33.9/gitlab'
-
-and
-
-unicorn['port'] = 8080
-
-by
-
-unicorn['port'] = 8088
-
-
-(Don't forget to uncomment)
-
-
-4- Reconfigure and restart gitlab
-
-4.1 sudo gitlab-ctl reconfigure
-
-4.2 sudo gitlab-ctl restart unicorn
-
-4.3 sudo gitlab-ctl restart
-
-
-
-### **** Test Case ****
+## Test Case
 
 Initial conditions: none
 
-Test Steps:
-1. Go to http://192.168.33.9/gitlab
+All tests are performed automatically without user interaction. It is possible to run unit test with maven.
 
-Post conditions:
-- GitLab is accessible at the indicated URL
-- It asks to enter passwork for the root creedentials
+- unit tests -> mvn test
+- integration tests -> mvn verify
 
-
-
-5- Set password for admin user
-
-5.1 Enter password (refered as $YOUR_PASSWORD later) for the root credentials.
-
-
-
-### **** Test Case ****
-
-Initial conditions: you have successfully entered a password for the root credentials
-
-Test Steps:
-
-1. Go to http://192.168.33.9/gitlab
-2. Log in using as user name "root" and password the one entered in the previous step.
-
-
-Post conditions:
-- You have successfully logged in as administrator
+Running tests on staging environment is performed with special WAR package that contains test classes.
