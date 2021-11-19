@@ -1,9 +1,15 @@
 ---
 
-- name: Install maven and npm.
+- name: Install maven.
   apt:
     name: "{{ packages }}"
   vars:
     packages:
       - maven
-      - npm
+
+- name: Install node, angular
+  shell: |
+    sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
+    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    sudo apt -y install nodejs
+    sudo npm install -g @angular/cli@12
