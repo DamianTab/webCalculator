@@ -9,6 +9,7 @@
   vars:
     HOME: /home/vagrant
     ROOT_TOKEN: this_is_my_private_token
+    CI_SERVER_URL: "http://192.168.33.9:8080/gitlab"
 
   tasks:
 

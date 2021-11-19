@@ -1,4 +1,4 @@
-image: maven:latest
+image: openkbs/jdk11-mvn-py3:latest
 
 stages:
   - build

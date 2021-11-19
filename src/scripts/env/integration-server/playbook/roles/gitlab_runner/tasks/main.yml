@@ -15,13 +15,8 @@
 - name: "Register integration runner"
   shell: |
     sudo apt install -y jq
-    register_token=$(curl -X GET --header "PRIVATE-TOKEN: this_is_my_private_token" "http://localhost/gitlab/api/v4/projects/2" 2>/dev/null | jq -r '.runners_token')
+    register_token=$(curl -X GET --header "PRIVATE-TOKEN: this_is_my_private_token" "{{CI_SERVER_URL}}/api/v4/projects/2" 2>/dev/null | jq -r '.runners_token')
     sudo gitlab-runner register --non-interactive --config /etc/gitlab-runner/config.toml --tag-list integration --registration-token $register_token \
-      --run-untagged --name "[integration-server] docker" --url http://localhost/gitlab --executor docker --docker-image alpine:latest
-
+      --run-untagged --name "[integration-server] docker" --url {{CI_SERVER_URL}} --executor docker --docker-image openkbs/jdk-mvn-py3:latest
 #  when: not flag.stat.exists
-
-#    authentication_token=$(curl -X POST --header "PRIVATE-TOKEN: this_is_my_private_token" --data "token=$register_token&description=[integration-server] docker&active=true&run_untagged=true&tag_list=integration" "http://localhost/gitlab/api/v4/runners" 2>/dev/null | jq -r '.token')
-#    echo "[[runners]]\n   token = \"$authentication_token\"" >> /etc/gitlab-runner/config.toml
-
 

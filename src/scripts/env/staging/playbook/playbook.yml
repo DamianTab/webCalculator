@@ -11,7 +11,8 @@
     JAVA_DIRECTORY: "/home/vagrant/java"
     VAGRANT_LIBS: "/home/vagrant/libs"
     JAVA_ARCHIVE: "jdk-11.0.12_linux-x64_bin.tar.gz"
-      
+    CI_SERVER_URL: "http://192.168.33.9:8080/gitlab"
+
   tasks:
   - include_role:
       name: java
