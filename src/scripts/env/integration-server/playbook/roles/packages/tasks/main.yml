@@ -1,0 +1,9 @@
+---
+
+- name: Install maven and npm.
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - maven
+      - npm

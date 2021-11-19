@@ -16,5 +16,3 @@
   tasks:
   - include_role:
       name: java
-
-  

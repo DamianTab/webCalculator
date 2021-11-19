@@ -17,8 +17,9 @@
 
   tasks:
   - include_role:
+      name: packages
+  - include_role:
       name: java
   - include_role:
       name: git
-
   

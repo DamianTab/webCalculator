@@ -8,18 +8,16 @@
   
   vars:
     HOME: /home/vagrant
-    ROOT_TOKEN: this_is_my_private_token
     CI_SERVER_URL: "http://192.168.33.9:8080/gitlab"
 
   tasks:
-
+  - include_role:
+      name: packages
+  - include_role:
+      name: java
   - include_role:
       name: gitlab
-
   - include_role:
       name: gitlab_runner
-
-  - include_role:
-      name: docker
 
   
