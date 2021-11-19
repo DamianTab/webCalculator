@@ -1,8 +1,10 @@
 stages:
   - build
-  - test
+  - unit_test
   - package
-  - deploy
+  - artifactory
+  - deploy_staging
+  - release
 
 variables:
   JAVA_HOME: /home/vagrant/java/jdk-11.0.12
@@ -13,27 +15,57 @@ before_script:
 cache:
   paths:
     - target/
+    - .m2/repository
+
+
+
 
 build_app:
   stage: build
+  tags:
+    - integration
   script:
     - mvn compile
 
 test_app:
-  stage: test
+  stage: unit_test
+  tags:
+    - integration
   script:
     - mvn test
 
 package_app:
   stage: package
+  tags:
+    - integration
   script:
     - mvn clean package -P webapp
 
-deploy_app:
-    stage: deploy
+deploy_app_on_artifactory:
+    stage: artifactory
+    tags:
+      - integration
     script:
     - echo "Deploy review app"
     artifacts:
         name: "webCalculator"
         paths:
-        - target/*.jar
+        - target/*.war
+
+deploy_on_staging_and_test:
+  stage: deploy_staging
+  tags:
+    - staging
+  script:
+#    shut down poprzedni jesli jest
+    - cp target/*.war /home/vagrant/stage
+#    - java -jar
+
+release_app:
+  stage: release
+  tags:
+    - releasing
+  script:
+    #    shut down poprzedni jesli jest
+    - cp target/*.war /home/vagrant/stage
+#    - java -jar

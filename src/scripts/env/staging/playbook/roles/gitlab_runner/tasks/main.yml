@@ -1,0 +1,22 @@
+---
+
+- name: "Check if GitLab-runner is already installed."
+  stat: "path={{HOME}}/runner_is_installed.flag"
+  register: flag
+
+- name: "Install GitLab-runner."
+  shell: |
+    curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+    sudo apt-get install gitlab-runner
+    touch {{HOME}}/runner_is_installed.flag
+  when: not flag.stat.exists
+
+
+- name: "Register staging runner"
+  shell: |
+    sudo apt install -y jq
+    register_token=$(curl -X GET --header "PRIVATE-TOKEN: this_is_my_private_token" "{{CI_SERVER_URL}}/api/v4/projects/2" 2>/dev/null | jq -r '.runners_token')
+    sudo gitlab-runner register --non-interactive --config /etc/gitlab-runner/config.toml --tag-list staging --registration-token $register_token \
+      --run-untagged --name "staging-runner" --url {{CI_SERVER_URL}} --executor shell --shell bash
+  when: not flag.stat.exists
+
