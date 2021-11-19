@@ -16,8 +16,8 @@
     BASE_PROJECT: "/home/vagrant/base_project"
 
   tasks:
-#  - include_role:
-#      name: packages
+  - include_role:
+      name: packages
   - include_role:
       name: java
   - include_role:
