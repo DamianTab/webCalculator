@@ -1,26 +1,22 @@
-# CI server
+# Deployment pipeline project
 
 
-## Asset composition
+## Asset composition and technologies
 
 - a vagrant VM specification (i.e. Vagrant file)
 - Ansible playbooks to provision the VM
 - GitLab as VCS and CI running into the VM
-- Docker service running into the VM
-
+- Node, Maven, Oracle JDK11
 
 
 
 ## Prerequisites
 
 ### Hardware
-
-1. Laptop with at least 8 Gb memory (recommended 16 Gb, ideally 32 Gb)
-
+1. Laptop/PC with at least 8 Gb memory (recommended 16 Gb, ideally 32 Gb)
 
 ### Software
-
-1. OS Ubuntu 18.04
+1. Linux-like host operating system (e.g. OS Ubuntu 18.04+)
 2. VirtualBox(v 6.0, or higher)
 3. Vagrant (v 2.2.5, or higher)
 4. Ansible (v 2.7.5, or higher)
